@@ -22,7 +22,7 @@ class Console
     public static function writeLine($format, $args = null)
     {
         $line = call_user_func_array(
-            'Console::write',
+            'WCKZ\Console\Console::write',
             func_get_args()
         );
 
