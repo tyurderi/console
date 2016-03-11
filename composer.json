@@ -1,0 +1,16 @@
+{
+    "name": "tyurderi/console",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "tyurderi",
+            "email": "tyurderi@yahoo.de"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "WCKZ\\Console\\": "src/"
+        }
+    }
+}
