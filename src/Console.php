@@ -1,28 +1,24 @@
 <?php
 
-namespace WCKZ\Console;
+namespace TM\Console;
 
 class Console
 {
 
-    public static function stop($reason = '')
+    public static function stop($reason = '', $code = 0)
     {
         if(!empty($reason))
         {
-            echo PHP_EOL, 'EXIT (255): ', $reason, PHP_EOL;
-        }
-        else
-        {
-            echo PHP_EOL, 'EXIT (255): reasonless exit, lol', PHP_EOL;
+            echo PHP_EOL, 'Stopped: ', $reason, PHP_EOL;
         }
 
-        exit(255);
+        exit($code);
     }
 
     public static function writeLine($format, $args = null)
     {
         $line = call_user_func_array(
-            'WCKZ\Console\Console::write',
+            array(__CLASS__, 'write'),
             func_get_args()
         );
 
