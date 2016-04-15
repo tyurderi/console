@@ -1,83 +1,91 @@
 <?php
 
-namespace WCKZ\Console;
+namespace TM\Console;
 
-class Console
+class Console implements StreamInterface
 {
 
-    public static function stop($reason = '')
+    protected static $instance = null;
+
+    public static function getInstance()
     {
-        if(!empty($reason))
+        if(self::$instance === null)
         {
-            echo PHP_EOL, 'EXIT (255): ', $reason, PHP_EOL;
-        }
-        else
-        {
-            echo PHP_EOL, 'EXIT (255): reasonless exit, lol', PHP_EOL;
+            self::$instance = new self();
         }
 
-        exit(255);
+        return self::$instance;
     }
 
-    public static function writeLine($format, $args = null)
-    {
-        $line = call_user_func_array(
-            'WCKZ\Console\Console::write',
-            func_get_args()
-        );
-
-        self::output($line);
-        self::newLine();
-    }
-
-    public static function write($format, $args = null)
-    {
-        $format = '';
-        $args   = array();
-
-        foreach(func_get_args() as $i => $arg) {
-            if($i == 0) {
-                $format = $arg;
-            }
-            else {
-                $args[] = $arg;
-            }
-        }
-
-        $line = call_user_func_array(
-            'sprintf',
-            array_merge(
-                array($format),
-                $args
-            )
-        );
-
-        self::output($line);
-    }
-
-    public static function startLine()
-    {
-        self::output("\r");
-    }
-
-    public static function endLine()
-    {
-        self::output("\n");
-    }
-
-    public static function newLine()
-    {
-        self::output("\r\n");
-    }
-
-    public static function readLine()
+    public function read()
     {
         return trim(fgets(STDIN));
     }
 
-    public static function output($line)
+    public function prompt($prompt, $accept = array())
     {
-        echo $line;
+        $this->inline($prompt);
+
+        return in_array(
+            strtolower(
+                $this->read()
+            ),
+            $accept
+        );
+    }
+
+    public function out($format, $args = array())
+    {
+        call_user_func_array(array($this, 'inline'), func_get_args());
+
+        return $this->br();
+    }
+
+    public function inline($format, $args = array())
+    {
+        return $this->__print(
+            call_user_func_array(
+                'sprintf',
+                func_get_args()
+            )
+        );
+    }
+
+    public function indent($count = 4)
+    {
+        for($i = 0; $i < $count; $i++)
+        {
+            $this->inline(' ');
+        }
+
+        return $this;
+    }
+
+    public function br($count = 1)
+    {
+        for($i = 0; $i < $count; $i++)
+        {
+            $this->__print(PHP_EOL);
+        }
+
+        return $this;
+    }
+
+    public function sl()
+    {
+        return $this->__print("\r");
+    }
+
+    public function el()
+    {
+        return $this->__print("\n");
+    }
+
+    protected function __print($text)
+    {
+        echo $text;
+
+        return $this;
     }
 
 }

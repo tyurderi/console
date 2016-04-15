@@ -10,7 +10,10 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "WCKZ\\Console\\": "src/"
-        }
+            "TM\\Console\\": "src/"
+        },
+        "files": [
+            "src/Console.function.php"
+        ]
     }
 }
