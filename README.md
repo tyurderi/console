@@ -24,6 +24,7 @@ $console->sl();
 
 // ends a line
 $console->el();
+
 // reads user input
 $console->read(); 
 
