@@ -21,15 +21,16 @@ class Console implements StreamInterface
     {
         return trim(fgets(STDIN));
     }
-
-    public function prompt($prompt, $accept = array())
+    
+    public function prompt($prompt, $accept = array(), $default = '')
     {
         $this->inline($prompt);
+        $this->inline(' [%s]: ', $default ? $default : 'yes/no');
+
+        $result = strtolower($this->read());
 
         return in_array(
-            strtolower(
-                $this->read()
-            ),
+            $result ? $result : $default,
             $accept
         );
     }
